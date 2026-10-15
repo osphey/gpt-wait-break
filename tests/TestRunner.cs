@@ -13,7 +13,7 @@ public static class TestRunner
                 using (ManualResetEvent ready = new ManualResetEvent(false))
                 using (EventTransport server = new EventTransport(delegate(BreakEvent e) {
                     File.WriteAllText(args[1], Configuration.Json.Serialize(e)); ready.Set();
-                })) { server.Start(); return ready.WaitOne(10000) ? 0 : 1; }
+                })) { server.Start(); bool received = ready.WaitOne(10000); if (received) Thread.Sleep(250); return received ? 0 : 1; }
             }
             int count = EngineTests.Run() + ProbeTests.Run();
             count += CheckConfigurationAndHooks();
@@ -60,17 +60,21 @@ public static class TestRunner
         // The runner always uses an isolated GPT_WAIT_BREAK_DATA_DIR/pipe namespace.
         if (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("GPT_WAIT_BREAK_DATA_DIR"))) throw new Exception("Test isolation is required.");
         BreakEvent observed = null;
+        int count = 0;
         using (ManualResetEvent delivered = new ManualResetEvent(false))
         using (EventTransport server = new EventTransport(delegate(BreakEvent e) { observed = e; delivered.Set(); })) {
             server.Start();
-            BreakEvent message = new BreakEvent { Kind = "stop", Source = "hook", SessionId = "ipc-fixture", TurnId = "turn-fixture", SentAtTicks = 42 };
-            bool sent = false;
-            for (int i = 0; i < 15 && !sent; i++) { sent = EventTransport.Send(message, false); if (!sent) Thread.Sleep(30); }
-            Assert(sent && delivered.WaitOne(2000), "private named-pipe event delivery");
-            Assert(observed != null && observed.SessionId == "ipc-fixture" && observed.SentAtTicks == 42, "IPC preserves normalized correlation and timestamp");
+            for (int iteration = 0; iteration < 25; iteration++) {
+                delivered.Reset();
+                BreakEvent message = new BreakEvent { Kind = "stop", Source = "hook", SessionId = "ipc-fixture", TurnId = "turn-fixture-" + iteration, SentAtTicks = 42 + iteration };
+                bool sent = false;
+                for (int i = 0; i < 15 && !sent; i++) { sent = EventTransport.Send(message, false); if (!sent) Thread.Sleep(30); }
+                Assert(sent && delivered.WaitOne(2000), "private named-pipe delivery acknowledged on iteration " + iteration); count++;
+                Assert(observed != null && observed.SessionId == "ipc-fixture" && observed.SentAtTicks == 42 + iteration, "IPC preserves normalized correlation and timestamp"); count++;
+            }
         }
-        Console.WriteLine("IPC: 2 checks passed.");
-        return 2;
+        Console.WriteLine("IPC: " + count + " checks passed.");
+        return count;
     }
 
     private static void Assert(bool value, string reason) { if (!value) throw new Exception(reason); }

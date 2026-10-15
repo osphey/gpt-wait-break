@@ -90,7 +90,11 @@ namespace GptWaitBreak
                         using (StreamReader reader = new StreamReader(pipe, Encoding.UTF8)) {
                             string line = ReadBoundedLine(reader, 16384);
                             BreakEvent message = Configuration.Json.Deserialize<BreakEvent>(line);
-                            if (message != null) received(message);
+                            if (message != null) {
+                                received(message);
+                                pipe.WriteByte(6); // ACK before the sender closes its pipe handle.
+                                pipe.Flush();
+                            }
                         }
                     }
                 } catch (IOException) { }
@@ -132,17 +136,23 @@ namespace GptWaitBreak
         {
             try {
                 using (NamedPipeClientStream pipe = new NamedPipeClientStream(".", AppPaths.PipeName,
-                    PipeDirection.InOut, PipeOptions.None, TokenImpersonationLevel.Identification)) {
+                    PipeDirection.InOut, PipeOptions.Asynchronous, TokenImpersonationLevel.Identification)) {
                     pipe.Connect(milliseconds);
                     using (StreamWriter writer = new StreamWriter(pipe, new UTF8Encoding(false))) {
                         writer.WriteLine(Configuration.Json.Serialize(message));
                         writer.Flush();
+                        // Without an ACK, a fast WinExe can exit before the server accepts/reads
+                        // the connection; Windows can then report a broken pipe and lose the event.
+                        byte[] acknowledgement = new byte[1];
+                        var read = pipe.ReadAsync(acknowledgement, 0, 1);
+                        if (!read.Wait(150) || read.Result != 1 || acknowledgement[0] != 6) return false;
                     }
                 }
                 return true;
             } catch (TimeoutException) { return false; }
               catch (IOException) { return false; }
               catch (UnauthorizedAccessException) { return false; }
+              catch (AggregateException) { return false; }
         }
 
         public void Dispose()
