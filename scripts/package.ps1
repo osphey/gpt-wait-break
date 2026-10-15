@@ -5,14 +5,14 @@ $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 & (Join-Path $repoRoot 'tests\run.ps1')
-$version = (Get-Content -LiteralPath (Join-Path $repoRoot 'plugin.json') -Raw -Encoding UTF8 | ConvertFrom-Json).version
+$version = (Get-Content -LiteralPath (Join-Path $repoRoot '.codex-plugin\plugin.json') -Raw -Encoding UTF8 | ConvertFrom-Json).version
 if ($version -notmatch '^\d+\.\d+\.\d+(?:-[A-Za-z0-9.-]+)?$') { throw 'Invalid plugin version.' }
 $packageName = "gpt-wait-break-$version-plugin"
 $distPath = [IO.Path]::GetFullPath((Join-Path $repoRoot 'dist'))
 $stagingPath = Join-Path $distPath ($packageName + '-' + [Guid]::NewGuid().ToString('N'))
 $zipPath = Join-Path $distPath ($packageName + '.zip')
 New-Item -ItemType Directory -Path $stagingPath -Force | Out-Null
-$items = @('plugin.json', '.codex-plugin', '.agents', 'marketplace.json', 'hooks', 'skills', 'docs', 'README.md', 'CHANGELOG.md', 'LICENSE', 'Install.ps1', 'scripts', 'tests')
+$items = @('.codex-plugin', '.agents', 'marketplace.json', 'hooks', 'skills', 'docs', 'README.md', 'CHANGELOG.md', 'LICENSE', 'Install.ps1', 'scripts', 'tests')
 foreach ($item in $items) {
     $sourcePath = Join-Path $repoRoot $item
     if (-not (Test-Path -LiteralPath $sourcePath)) { throw "Package file is missing: $item" }

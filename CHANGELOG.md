@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2
+
+- 改用 `.codex-plugin/plugin.json` 兼容格式，修复当前客户端能安装却跳过插件 hooks 的问题。
+- 明确 `/hooks` 在 Codex 命令窗口中输入。
 ## 0.2.1
 
 - 修复系统 PowerShell 中找不到 Codex CLI 的安装错误，自动发现桌面端已有工具。

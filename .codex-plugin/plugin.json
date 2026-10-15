@@ -1,6 +1,6 @@
 {
   "name": "gpt-wait-break",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Browse while AI thinks. Return when it finishes.",
   "author": {
     "name": "Osphey"
