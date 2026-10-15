@@ -1,0 +1,23 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "gpt-wait-break",
+  "version": "0.1.0",
+  "description": "等待 AI 回答时浏览自己的常用网站，完成或中断后回到聊天。Windows 桌面本地插件。",
+  "author": { "name": "Osphey" },
+  "license": "MIT",
+  "extensions": {
+    "com.openai": {
+      "requires_local_executor": true,
+      "onboardingSkill": "./skills/wait-break/SKILL.md",
+      "hooks": "./hooks/hooks.json",
+      "interface": {
+        "displayName": "GPT Wait Break · 等待时刷一会",
+        "shortDescription": "AI 思考时打开常用网站，完成后回到聊天",
+        "longDescription": "Windows x64 本地桌面插件，包含持久登录的独立 WebView2 网站窗口。普通聊天检测需手动启用实验性无障碍模式。",
+        "developerName": "Osphey",
+        "category": "Productivity",
+        "defaultPrompt": ["帮我设置 GPT Wait Break 的常用网站和等待时间。"]
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "gpt-wait-break",
+  "version": "0.1.0",
+  "description": "Windows 桌面本地等待伴侣：思考时刷网站，结束后回聊天。",
+  "author": { "name": "Osphey" },
+  "license": "MIT",
+  "requires_local_executor": true,
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "interface": {
+    "displayName": "GPT Wait Break · 等待时刷一会",
+    "shortDescription": "AI 思考时打开常用网站，完成后回到聊天",
+    "longDescription": "包含独立 WebView2 窗口；本地 Work/Codex 使用 hooks，普通聊天的无障碍检测属于实验性功能。",
+    "developerName": "Osphey",
+    "category": "Productivity"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "description": "Windows 本地事件转发；不会批准操作、改变回答或向模型注入内容。安装后仍须由用户审核并信任 hooks。",
+  "hooks": {
+    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "powershell.exe -NoProfile -NonInteractive -Command \"$OutputEncoding = New-Object System.Text.UTF8Encoding; [Console]::In.ReadToEnd() | & (Join-Path $env:PLUGIN_ROOT 'bin/GptWaitBreak.exe') --hook UserPromptSubmit; exit $LASTEXITCODE\"", "timeout": 3 }] }],
+    "Stop": [{ "hooks": [{ "type": "command", "command": "powershell.exe -NoProfile -NonInteractive -Command \"$OutputEncoding = New-Object System.Text.UTF8Encoding; [Console]::In.ReadToEnd() | & (Join-Path $env:PLUGIN_ROOT 'bin/GptWaitBreak.exe') --hook Stop; exit $LASTEXITCODE\"", "timeout": 3 }] }],
+    "Interrupt": [{ "hooks": [{ "type": "command", "command": "powershell.exe -NoProfile -NonInteractive -Command \"$OutputEncoding = New-Object System.Text.UTF8Encoding; [Console]::In.ReadToEnd() | & (Join-Path $env:PLUGIN_ROOT 'bin/GptWaitBreak.exe') --hook Interrupt; exit $LASTEXITCODE\"", "timeout": 3 }] }],
+    "PermissionRequest": [{ "hooks": [{ "type": "command", "command": "powershell.exe -NoProfile -NonInteractive -Command \"$OutputEncoding = New-Object System.Text.UTF8Encoding; [Console]::In.ReadToEnd() | & (Join-Path $env:PLUGIN_ROOT 'bin/GptWaitBreak.exe') --hook PermissionRequest; exit $LASTEXITCODE\"", "timeout": 3 }] }],
+    "SessionEnd": [{ "hooks": [{ "type": "command", "command": "powershell.exe -NoProfile -NonInteractive -Command \"$OutputEncoding = New-Object System.Text.UTF8Encoding; [Console]::In.ReadToEnd() | & (Join-Path $env:PLUGIN_ROOT 'bin/GptWaitBreak.exe') --hook SessionEnd; exit $LASTEXITCODE\"", "timeout": 3 }] }]
+  }
+}
