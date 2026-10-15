@@ -14,7 +14,7 @@ AI 思考时刷一会，回答完成或中断后回到聊天。
 
 ## 安装
 
-1. 从 [Releases](https://github.com/osphey/gpt-wait-break/releases/tag/v0.2.0) 下载 `gpt-wait-break-0.2.0-plugin.zip` 并解压。
+1. 从 [Releases](https://github.com/osphey/gpt-wait-break/releases/tag/v0.2.1) 下载 `gpt-wait-break-0.2.1-plugin.zip` 并解压。
 2. 在解压目录运行 `powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./Install.ps1`，或按[手动安装](docs/INSTALL.md)注册本地 marketplace。
 3. 重启桌面端，启用插件，并按官方流程审核、信任 hooks。
 
@@ -40,4 +40,4 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/package.ps1
 ```
 
 执行策略参数仅作用于本次脚本进程，不修改系统设置，不替代 hooks 信任审核。
-v0.2.0 预览版。验证状态见 [CHANGELOG](CHANGELOG.md)。[MIT](LICENSE) © Osphey
+v0.2.1 预览版。验证状态见 [CHANGELOG](CHANGELOG.md)。[MIT](LICENSE) © Osphey

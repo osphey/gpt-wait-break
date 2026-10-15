@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1
+
+- 修复系统 PowerShell 中找不到 Codex CLI 的安装错误，自动发现桌面端已有工具。
+- 支持 `Install.ps1 -CodexPath <path>`；无需修改 PATH 或额外安装 CLI。
+- 验证：5 项 Windows PowerShell 5 安装路径检查通过。
 ## 0.2.0
 
 - 改为纯插件：hooks + skill + PowerShell，使用已有 Edge/Chrome。
