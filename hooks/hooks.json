@@ -1,10 +1,61 @@
 {
-  "description": "Windows 本地事件转发；不会批准操作、改变回答或向模型注入内容。安装后仍须由用户审核并信任 hooks。",
+  "description": "Windows 本地 Work/Codex：等待时显示网站，结束或需要操作时返回聊天。",
   "hooks": {
-    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "powershell.exe -NoProfile -NonInteractive -Command \"$OutputEncoding = New-Object System.Text.UTF8Encoding; [Console]::In.ReadToEnd() | & (Join-Path $env:PLUGIN_ROOT 'bin/GptWaitBreak.exe') --hook UserPromptSubmit; exit $LASTEXITCODE\"", "timeout": 3 }] }],
-    "Stop": [{ "hooks": [{ "type": "command", "command": "powershell.exe -NoProfile -NonInteractive -Command \"$OutputEncoding = New-Object System.Text.UTF8Encoding; [Console]::In.ReadToEnd() | & (Join-Path $env:PLUGIN_ROOT 'bin/GptWaitBreak.exe') --hook Stop; exit $LASTEXITCODE\"", "timeout": 3 }] }],
-    "Interrupt": [{ "hooks": [{ "type": "command", "command": "powershell.exe -NoProfile -NonInteractive -Command \"$OutputEncoding = New-Object System.Text.UTF8Encoding; [Console]::In.ReadToEnd() | & (Join-Path $env:PLUGIN_ROOT 'bin/GptWaitBreak.exe') --hook Interrupt; exit $LASTEXITCODE\"", "timeout": 3 }] }],
-    "PermissionRequest": [{ "hooks": [{ "type": "command", "command": "powershell.exe -NoProfile -NonInteractive -Command \"$OutputEncoding = New-Object System.Text.UTF8Encoding; [Console]::In.ReadToEnd() | & (Join-Path $env:PLUGIN_ROOT 'bin/GptWaitBreak.exe') --hook PermissionRequest; exit $LASTEXITCODE\"", "timeout": 3 }] }],
-    "SessionEnd": [{ "hooks": [{ "type": "command", "command": "powershell.exe -NoProfile -NonInteractive -Command \"$OutputEncoding = New-Object System.Text.UTF8Encoding; [Console]::In.ReadToEnd() | & (Join-Path $env:PLUGIN_ROOT 'bin/GptWaitBreak.exe') --hook SessionEnd; exit $LASTEXITCODE\"", "timeout": 3 }] }]
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \"& (Join-Path $env:PLUGIN_ROOT 'scripts/hook.ps1') -EventName UserPromptSubmit\"",
+            "async": true,
+            "timeout": 20
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \"& (Join-Path $env:PLUGIN_ROOT 'scripts/hook.ps1') -EventName Stop\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Interrupt": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \"& (Join-Path $env:PLUGIN_ROOT 'scripts/hook.ps1') -EventName Interrupt\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \"& (Join-Path $env:PLUGIN_ROOT 'scripts/hook.ps1') -EventName PermissionRequest\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \"& (Join-Path $env:PLUGIN_ROOT 'scripts/hook.ps1') -EventName SessionEnd\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ]
   }
 }
